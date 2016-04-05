@@ -17,6 +17,8 @@ void OBJObject::parse(const char *filepath)
 	float r, g, b;
 	int c1, c2;
 
+	glm::vec3 vectorTemp;
+
 	string line, name;
 
 	// Open file
@@ -29,24 +31,27 @@ void OBJObject::parse(const char *filepath)
 	}
 
 	//Skip comment lines
-	while (std::getline(file, line)) {
+	while (getline(filepath, line)) {
 		if (line == ' ' || line == '#')
 			continue;
 	}
 
 	c1 = fgetc(fp);
 	c2 = fgetc(fp);
-	c3 = fgetc(fp);
 
-	while (Nread = (fscanf(fp, "%f %f %f %f %f %f", &x, &y, &z, &r, &g, &b)) != EOF) {
-		if (c1 == 'v') && (c2 == 'vn') && (c3 == 'f') {
-			fscanf(fp, "%f %f %f %f %f %f", &x, &y, &z, &r, &g, &b);
+	//Read normal data accordingly
+	while (Nread = (fscanf(fp, "%f %f %f", &x, &y, &z)) != EOF) {
+		if (c1 == 'v') && (c2 == ' ') {
+			vectorTemp = fscanf(fp, "%f %f %f", &x, &y, &z);
+			vertices = vectorTemp;
+		}
+
+		else if (c1 == 'v') && (c2 == 'n') {
+			vectorTemp = fscanf(fp, "%f %f %f", &x, &y, &z);
+			normals = vectorTemp;
 		}
 	}
-
-	// Read normal data accordingly
-	while( )
-
+	
 	//Close file when done
 	fclose(fp);
 }
